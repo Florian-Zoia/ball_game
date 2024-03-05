@@ -8,6 +8,8 @@
   /* grid-gap: 1em; */
   grid-template-rows: repeat(var(--grid-rows), 1fr);
   grid-template-columns: repeat(var(--grid-cols), 1fr);
+  border: 5px solid;
+  border-color: blue;
 }
 
 .grid-item {
@@ -18,9 +20,18 @@
   aspect-ratio: 1;
 }
 
+.grid-item-black {
+    /* padding: 1em; */
+    border: 1px solid #ddd;
+    text-align: center;
+    /* background-color: red; */
+    aspect-ratio: 1;
+    background-color: black;
+}
+
 .middle {
-  width: 30vw;
-  height: 30vw;
+  width: 50vw;
+  height: 50vw;
   max-width: 100vh;
   max-height: 100vh;
   position: absolute;
@@ -29,12 +40,10 @@
   /* background: red; */
 }
 
-.ball {
-  width: 20px; /* Adjust as needed */
-  height: 20px; /* Adjust as needed */
-  border-radius: 50%; /* to make it round */
+#ball {
+  width: 20px;
+  height: 20px;
   background-color: red;
+  border-radius: 25px;
   position: absolute;
-  top: 0;
-  left: 0;
 }

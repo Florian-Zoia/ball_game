@@ -1,54 +1,68 @@
-document.addEventListener('DOMContentLoaded', function () {
-
-  const container = document.getElementById("container");
-  console.log(container);
-  makeRows(5, 5);
-
-  // Create ball element
-  const ball = document.getElementById('div');
-  
-  // Initial position of the ball
-  let positionX = 0;
-  let positionY = 0;
-  
-  // Movement direction of the ball
-  let directionX = 1;
-  let directionY = 1;
-  
-  moveBall(positionX, positionY, directionX, directionY); 
-  
-})
-
-
 function makeRows(rows, cols) {
   container.style.setProperty('--grid-rows', rows);
   container.style.setProperty('--grid-cols', cols);
   console.log("help i just cried");
   for (c = 0; c < (rows * cols); c++) {
     let cell = document.createElement("div");
-    cell.innerText = (c + 1);
+    cell.innerText = (c);
+    cell.id = c.toString();
     container.appendChild(cell).className = "grid-item";
   };
+  const log = document.getElementById("24");
+  console.log("height " + log.offsetHeight);
+  console.log("left " + log.offsetLeft);
+  console.log("parent " + log.offsetParent);
+  console.log("top " + log.offsetTop);
+  console.log("width " + log.offsetWidth);
+  console.log(log.clientWidth);
+  console.log(log.clientHeight);
+  console.log(document.getElementById("12").offsetLeft + document.getElementById("12").offsetWidth)
 };
 
-function moveBall(positionX, positionY, directionX, directionY) {
-  console.log(ball);
-  // Update ball position
-  positionX += directionX;
-  positionY += directionY;
 
-  // Check boundaries
-  if (positionX <= 0 || positionX >= container.offsetWidth - ball.offsetWidth) {
-      directionX *= -1;
-  }
-  if (positionY <= 0 || positionY >= container.offsetHeight - ball.offsetHeight) {
-      directionY *= -1;
-  }
+const container = document.getElementById("container");
+makeRows(5, 5);
+const ball = document.getElementById("ball");
+let x = 0;
+let y = 0;
+let xSpeed = Math.random() * 5;
+let ySpeed = Math.random() * 5;
 
-  // Update ball's CSS position
-  ball.style.top = positionY + 'px';
-  ball.style.left = positionX + 'px';
-
-  // Call moveBall function recursively for animation
-  requestAnimationFrame(moveBall(positionX, positionY, directionX, directionY));
+function animate() {
+x += xSpeed;
+y += ySpeed
+//Collision Walls 
+if (x + 20 > container.clientWidth || x < 0) {
+   xSpeed = -xSpeed;
 }
+if (y + 20 > container.clientHeight || y < 0) {
+   ySpeed = -ySpeed;
+}
+
+//Collision for the center block 
+if (y + 25 > document.getElementById("12").offsetTop && x + 25 > document.getElementById("12").offsetLeft && x + 25 < (document.getElementById("12").offsetLeft + document.getElementById("12").clientWidth) && y + 25 < (document.getElementById("12").offsetTop + document.getElementById("12").clientHeight)) {
+  xSpeed = -xSpeed;
+  ySpeed = -ySpeed;
+  if (document.getElementById("12").className == "grid-item-black") {
+    document.getElementById("12").className = "grid-item";
+  } else {
+    document.getElementById("12").className = "grid-item-black";
+  }
+}
+
+if (y + 25 > document.getElementById("12").offsetTop && x + 25 > document.getElementById("12").offsetLeft && x + 25 < (document.getElementById("12").offsetLeft + document.getElementById("12").clientWidth) && y + 25 < (document.getElementById("12").offsetTop + document.getElementById("12").clientHeight)) {
+  xSpeed = -xSpeed;
+  ySpeed = -ySpeed;
+  if (document.getElementById("12").className == "grid-item-black") {
+    document.getElementById("12").className = "grid-item";
+  } else {
+    document.getElementById("12").className = "grid-item-black";
+  }
+}
+
+ball.style.left = x + "px";
+ball.style.top = y + "px";
+requestAnimationFrame(animate);
+};
+
+animate();
