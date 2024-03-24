@@ -1,67 +1,101 @@
 function makeRows(rows, cols) {
   container.style.setProperty('--grid-rows', rows);
   container.style.setProperty('--grid-cols', cols);
+  // let ball = document.createElement("div");
+  // ball.id = "ball"; 
   console.log("help i just cried");
   for (c = 0; c < (rows * cols); c++) {
+    // if (c == (Math.floor((Math.random() * 10)))) {
+    //   container.appendChild(ball)
+    // }
     let cell = document.createElement("div");
     cell.innerText = (c);
     cell.id = c.toString();
-    container.appendChild(cell).className = "grid-item";
+    if (c > 14) {
+      container.appendChild(cell).className = "grid-item-black";
+    } else {
+      container.appendChild(cell).className = "grid-item";
+    }
   };
-  const log = document.getElementById("24");
-  console.log("height " + log.offsetHeight);
-  console.log("left " + log.offsetLeft);
-  console.log("parent " + log.offsetParent);
-  console.log("top " + log.offsetTop);
-  console.log("width " + log.offsetWidth);
-  console.log(log.clientWidth);
-  console.log(log.clientHeight);
-  console.log(document.getElementById("12").offsetLeft + document.getElementById("12").offsetWidth)
 };
 
-
+const rows = 5;
+const cols = 5;
 const container = document.getElementById("container");
-makeRows(5, 5);
-const ball = document.getElementById("ball");
-let x = 0;
-let y = 0;
-let xSpeed = Math.random() * 5;
-let ySpeed = Math.random() * 5;
+makeRows(rows, cols);
+
+//white tile ball 
+const ball_white = document.getElementById("ball-white");
+let x_white_speed = Math.random() * 5;
+let y_white_speed = Math.random() * 5;
+let x_white = Math.floor(container.clientWidth / 2);
+let y_white = Math.floor(Math.random() * (container.clientHeight / 3));
+
+//black tile
+const ball_black = document.getElementById("ball-black");
+let x_black_speed = -x_white_speed;
+let y_black_speed = -y_white_speed;
+let x_black = Math.floor(container.clientWidth / 2);
+let y_black = Math.floor((Math.random() * (container.clientHeight / 3)) + ((container.clientHeight / 3) * 2));
 
 function animate() {
-x += xSpeed;
-y += ySpeed
+//Position ball and start animation
+x_white += x_white_speed;
+y_white += y_white_speed;
+
+x_black += x_black_speed;
+y_black += y_black_speed;
+
 //Collision Walls 
-if (x + 20 > container.clientWidth || x < 0) {
-   xSpeed = -xSpeed;
+if (x_white + 20 > container.clientWidth || x_white < 0) {
+   x_white_speed = -x_white_speed;
 }
-if (y + 20 > container.clientHeight || y < 0) {
-   ySpeed = -ySpeed;
+if (y_white + 20 > container.clientHeight || y_white < 0) {
+   y_white_speed = -y_white_speed;
 }
 
-//Collision for the center block 
-if (y + 25 > document.getElementById("12").offsetTop && x + 25 > document.getElementById("12").offsetLeft && x + 25 < (document.getElementById("12").offsetLeft + document.getElementById("12").clientWidth) && y + 25 < (document.getElementById("12").offsetTop + document.getElementById("12").clientHeight)) {
-  xSpeed = -xSpeed;
-  ySpeed = -ySpeed;
-  if (document.getElementById("12").className == "grid-item-black") {
-    document.getElementById("12").className = "grid-item";
-  } else {
-    document.getElementById("12").className = "grid-item-black";
+if (x_black + 20 > container.clientWidth || x_black < 0) {
+  x_black_speed = -x_black_speed;
+}
+if (y_black + 20 > container.clientHeight || y_black < 0) {
+  y_black_speed = -y_black_speed;
+}
+
+//Collision on black blocks and change to white 
+for (i = 1 ; i < (rows * cols) ; i++) {
+  if ((y_white + 25 > document.getElementById(i).offsetTop && x_white + 25 > document.getElementById(i).offsetLeft && x_white + 25 < (document.getElementById(i).offsetLeft + document.getElementById(i).clientWidth) && y_white + 25 < (document.getElementById(i).offsetTop + document.getElementById(i).clientHeight)) && document.getElementById(i).className == "grid-item-black") {
+    if (y_white >= document.getElementById(i).offsetTop || y_white + 25 < (document.getElementById(i).offsetTop + document.getElementById(i).clientHeight)) {
+      y_white_speed = -y_white_speed; 
+    } else {
+      x_white_speed = -x_white_speed; 
+      console.log("i am an asshole");
+    }
+    document.getElementById(i).className = "grid-item";
   }
 }
 
-if (y + 25 > document.getElementById("12").offsetTop && x + 25 > document.getElementById("12").offsetLeft && x + 25 < (document.getElementById("12").offsetLeft + document.getElementById("12").clientWidth) && y + 25 < (document.getElementById("12").offsetTop + document.getElementById("12").clientHeight)) {
-  xSpeed = -xSpeed;
-  ySpeed = -ySpeed;
-  if (document.getElementById("12").className == "grid-item-black") {
-    document.getElementById("12").className = "grid-item";
-  } else {
-    document.getElementById("12").className = "grid-item-black";
+//Collision on black white and change to black 
+for (i = 1 ; i < (rows * cols) ; i++) {
+
+  if ((y_black  > document.getElementById(i).offsetTop &&
+        x_black  > document.getElementById(i).offsetLeft && 
+        x_black  < (document.getElementById(i).offsetLeft + document.getElementById(i).clientWidth) &&
+        y_black  < (document.getElementById(i).offsetTop + document.getElementById(i).offsetHeight)) &&
+        document.getElementById(i).className == "grid-item") {
+
+    x_black_speed = -x_black_speed; 
+    y_black_speed = -y_black_speed; 
+    document.getElementById(i).className = "grid-item-black";
+
   }
+
 }
 
-ball.style.left = x + "px";
-ball.style.top = y + "px";
+ball_white.style.left = x_white + "px";
+ball_white.style.top = y_white + "px";
+
+ball_black.style.left = x_black + "px";
+ball_black.style.top = y_black + "px";
 requestAnimationFrame(animate);
 };
 
